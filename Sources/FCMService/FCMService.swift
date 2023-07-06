@@ -79,7 +79,7 @@ public class FCMService: NSObject, UNUserNotificationCenterDelegate, MessagingDe
     
 }
 
-extension FCMService {
+extension FCMService: UIApplicationDelegate {
     @available(iOS 13.0.0, *)
     public func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification) async -> UNNotificationPresentationOptions {
         let userInfo = notification.request.content.userInfo
@@ -88,6 +88,7 @@ extension FCMService {
     }
     
     public func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        NSLog("[PRESENT FROM NOTI]: PRENSENT!")
         defer { completionHandler() }
         guard response.actionIdentifier == UNNotificationDefaultActionIdentifier else { return }
         let identity = response.notification.request.content.categoryIdentifier
@@ -95,7 +96,7 @@ extension FCMService {
         guard identity == category?.identifier else { return }
         handlerDelegate?.onOpen()
     }
-    
+
     
 }
 
@@ -111,4 +112,5 @@ extension FCMService {
             userInfo: dataDict
         )
     }
+
 }
